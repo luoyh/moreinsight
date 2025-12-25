@@ -9,7 +9,7 @@ dependencies = [
     "google-adk>=1.21.0",
     "langchain-openai>=1.1.6",
     "litellm>=1.80.11",
-    "mysql>=0.0.3",
+    "mcp>=1.25.0",
     "mysql-connector-python==8.4",
     "pandas>=2.3.3",
     "pydantic-ai>=1.31.0",
