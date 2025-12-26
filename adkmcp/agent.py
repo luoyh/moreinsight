@@ -28,8 +28,8 @@ root_agent = Agent(
         McpToolset(
             connection_params=StdioConnectionParams(
                 server_params = StdioServerParameters(
-                    command='uv', # Command to run your MCP server script
-                    args=[PATH_TO_YOUR_MCP_SERVER_SCRIPT], # Argument is the path to the script
+                    command='uv',
+                    args=["run", PATH_TO_YOUR_MCP_SERVER_SCRIPT]
                 )
             )
             # tool_filter=['load_web_page'] # Optional: ensure only specific tools are loaded
