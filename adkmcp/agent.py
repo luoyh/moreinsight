@@ -7,7 +7,7 @@ from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
 # IMPORTANT: Replace this with the ABSOLUTE path to your my_adk_mcp_server.py script
-PATH_TO_YOUR_MCP_SERVER_SCRIPT = "e:/.roy/data/code/tmp/insight/mcp/server.py" # <<< REPLACE
+PATH_TO_YOUR_MCP_SERVER_SCRIPT = "e:/.roy/data/code/tmp/moreinsight/insight/mcp/server.py" # <<< REPLACE
 
 print("PATH_TO_YOUR_MCP_SERVER_SCRIPT:", PATH_TO_YOUR_MCP_SERVER_SCRIPT)
 

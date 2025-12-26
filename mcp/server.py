@@ -14,8 +14,14 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger("mysql_mcp_server")
 
+logger = logging.getLogger("mysql_mcp_server")
+file_handler = logging.FileHandler(filename=".logs/mcp_server.log",encoding="utf-8")
+file_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 load_dotenv()
 mcp = FastMCP("mysql_mcp_server")
 
@@ -42,7 +48,6 @@ async def get_system_prompt() -> str:
 
 def connect_mysql():
     """连接MySQL数据库"""
-    logger.info("连接MySQL数据库")
     config = get_db_config()
     mysql_conn = mysql.connector.connect(**config)  
     return mysql_conn
@@ -67,7 +72,6 @@ async def execute_query(query: str, params: tuple = None) -> list:
 @mcp.tool(title="获取MySQL数据库所有表名")
 async def get_tables() -> list:
     """获取数据库中所有表名"""
-    logger.info("获取所有表名")
     query = """
     SELECT table_name 
     FROM information_schema.tables 
@@ -79,7 +83,6 @@ async def get_tables() -> list:
 @mcp.tool(title="获取MySQL数据库表结构")
 async def get_table_structure(table_name: str) -> list:
     """获取指定表的结构（字段名、类型、注释等）"""
-    logger.info(f"获取表结构: {table_name}")
     query = """
     SELECT 
         column_name AS field,
@@ -102,14 +105,12 @@ async def get_table_comment(table_name: str) -> str:
     FROM information_schema.tables 
     WHERE table_schema = %s AND table_name = %s
     """
-    logger.info(f"获取表注释: {table_name}")
     result = await execute_query(query, (mysql_conn.config.database, table_name))
     return result[0]["TABLE_COMMENT"] if result else "无注释"
 
 @mcp.tool(title="获取MySQL数据库表数据量")
 async def get_table_row_count(table_name: str) -> int:  
     """获取指定表的数据量"""
-    logger.info(f"获取表数据量: {table_name}")
     query = f"SELECT COUNT(*) AS count FROM {table_name}"
     result = await execute_query(query) 
     return result[0]["count"] if result else 0
@@ -117,11 +118,9 @@ async def get_table_row_count(table_name: str) -> int:
 @mcp.tool(title="获取MySQL数据库表前N行数据")
 async def get_table_top_rows(table_name: str, sort_by: str = "create_time", sort_method: str = "desc", limit: int = 10) -> list:
     """获取指定表的前N行数据，默认按创建时间(create_time)倒序排序"""
-    logger.info(f"获取表前{limit}行数据: {table_name}")
     query = f"SELECT * FROM {table_name} ORDER BY {sort_by} {sort_method} LIMIT %s"
     result = await execute_query(query, (limit,))
     return result
-
 
 
 if __name__ == "__main__":
