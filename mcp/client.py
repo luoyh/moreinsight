@@ -18,25 +18,25 @@ class MCPClient:
         self.anthropic = Anthropic()
     # methods will go here
 
-async def connect_to_server(self, server_script_path: str):
-    """Connect to an MCP server
+    async def connect_to_server(self, server_script_path: str):
+        """Connect to an MCP server
 
-    Args:
-        server_script_path: Path to the server script (.py or .js)
-    """
-    server_params = StdioServerParameters(
-        command='uv',
-        args=[server_script_path],
-        env=None
-    )
+        Args:
+            server_script_path: Path to the server script (.py or .js)
+        """
+        server_params = StdioServerParameters(
+            command='uv',
+            args=[server_script_path],
+            env=None
+        )
 
-    stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
-    self.stdio, self.write = stdio_transport
-    self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+        stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
+        self.stdio, self.write = stdio_transport
+        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
 
-    await self.session.initialize()
+        await self.session.initialize()
 
-    # List available tools
-    response = await self.session.list_tools()
-    tools = response.tools
-    print("\nConnected to server with tools:", [tool.name for tool in tools])
+        # List available tools
+        response = await self.session.list_tools()
+        tools = response.tools
+        print("\nConnected to server with tools:", [tool.name for tool in tools])

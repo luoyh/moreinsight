@@ -36,6 +36,7 @@ async def get_system_prompt(self) -> str:
 @mcp.tool(title="连接MySQL数据库")
 async def connect_mysql():
     """连接MySQL数据库"""
+    print("连接数据库")
     config = get_db_config()
     mysql_conn = mysql.connector.connect(**config)  
     return mysql_conn
@@ -43,6 +44,7 @@ async def connect_mysql():
 @mcp.tool(title="关闭MySQL数据库连接")
 async def close_mysql(mysql_conn):
     """关闭MySQL数据库连接"""
+    print("关闭数据库连接")
     if mysql_conn and mysql_conn.is_connected():
         mysql_conn.close()
 
@@ -50,6 +52,7 @@ async def close_mysql(mysql_conn):
 @mcp.tool(title="执行MySQL查询")
 async def execute_query(mysql_conn, query: str, params: tuple = None) -> list:
     """执行查询并返回结果"""
+    print(f"执行查询: {query}")
     result = []
     try:
         cursor = mysql_conn.cursor(dictionary=True)
